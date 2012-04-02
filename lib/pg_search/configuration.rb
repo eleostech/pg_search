@@ -61,6 +61,10 @@ module PgSearch
       @options[:order_within_rank]
     end
 
+    def select_only_rank
+      @options[:select_only_rank]
+    end
+
     def postgresql_version
       @model.connection.send(:postgresql_version)
     end
@@ -76,7 +80,7 @@ module PgSearch
     end
 
     def assert_valid_options(options)
-      valid_keys = [:against, :ranked_by, :ignoring, :using, :query, :associated_against, :order_within_rank]
+      valid_keys = [:against, :ranked_by, :ignoring, :using, :query, :associated_against, :order_within_rank, :select_only_rank]
       valid_values = {
         :ignoring => [:accents]
       }

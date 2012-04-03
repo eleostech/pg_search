@@ -20,13 +20,17 @@ module PgSearch
     end
 
     def to_relation
-      columns = "(#{rank}) AS pg_search_rank"
+      relation = @model
 
-      if !@config.select_only_rank
-        columns += ", #{quoted_table_name}.*"
+      if !@config.exclude_rank_select
+        relation = relation.select("(#{rank}) AS pg_search_rank").order("pg_search_rank DESC, #{order_within_rank}")
       end
 
-      @model.select(columns).where(conditions).order("pg_search_rank DESC, #{order_within_rank}").joins(joins)
+      if !@config.exclude_universal_select
+        relation = relation.select("#{quoted_table_name}.*")
+      end
+
+      relation.where(conditions).joins(joins)
     end
 
     private
